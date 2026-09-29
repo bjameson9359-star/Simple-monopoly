@@ -18,9 +18,10 @@ int level;
 // linked list elements
 
 Board* nextspot;
+Board* previous;
 
 Board :: Board () {
-	placeName = "default";
+	placeName = "doesn't exist";
 	price = 1000000000;
 	rent = {1,2,3};
 	owner = joe;
@@ -34,14 +35,9 @@ Board :: Board(string n, int cost, vector<int> payments) {
 	rent = payments;
 	owner = joe;
 	nextspot = first;
+	previous = last;
 	level = 1;
 }
-
-void changenextspot(Board* newnextspot) {
-	nextspot = newnextspot;
-}
-
-
 
 Board* Board :: navigate(int spot) {
 	Board* current = first;
@@ -63,6 +59,30 @@ void Board :: addElement(string n, int cost, vector<int> payments) {
 	last = addition;
 }
 
+void Board :: insertElement(string n, int cost, int spot, vector<int> payments) {
+	Board* addition = new Board(n, cost, payments);
+	Board* position = navigate(spot);
+	addition -> setnextspot(position -> getnextspot());
+	addition -> setpre(position);
+	position -> setnextspot(addition);
+}
+
+Board* Board :: findSpot(string s){
+    Board* current = first;
+    while(current -> nextspot != first){
+        if(current -> getplaceName() == s){
+        return current;
+        }
+    }
+    return new Board();
+}
+	
+void Board :: removeSpot(string s){
+    Board* removal = findSpot(s);
+    removal -> getPre() -> setnextspot(removal -> getnextspot());
+    removal -> getnextspot() -> setpre(removal -> getPre());
+}
+
 string Board :: getplaceName() {
 	return placeName;
 }
@@ -77,6 +97,14 @@ void  Board :: setnextspot(Board* x) {
 
 int Board:: getPrice() {
 	return price;
+}
+
+Board* Board :: getPre(){
+    return previous;
+}
+	
+void Board :: setpre(Board* x){
+    previous = x;
 }
 
 Player* Board:: getOwner() {

@@ -25,7 +25,7 @@ private:
 	static Board* first;
 	static Board* last;
 	Board* nextspot;
-
+    Board* previous;
 
 public:
 	static Player* joe;
@@ -34,9 +34,13 @@ public:
 
 	Board(string n, int cost, vector<int> payments);
 
-	void changenextspot(Board* newnextspot);
-
 	static Board* navigate(int spot);
+	
+	Board* findSpot(string s);
+	
+	void removeSpot(string s);
+	
+	void insertElement(string n, int cost, int spot, vector<int> payments);
 
 	static void createFirst(string n, int cost, vector<int> payments);
 
@@ -47,6 +51,10 @@ public:
 	Board* getnextspot();
 
 	void setnextspot(Board* x);
+	
+	Board* getPre();
+	
+	void setpre(Board* x);
 
 	int getPrice();
 
